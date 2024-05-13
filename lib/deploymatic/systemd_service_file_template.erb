@@ -1,0 +1,30 @@
+[Unit]
+Description=<%= name %>
+
+[Service]
+Type=simple
+Restart=always
+WorkingDirectory=<%= install_dir.gsub('$HOME', '%h') %>
+ExecStart=<%= start_command %>
+<% if stop_command -%>
+ExecStop=<%= stop_command %>
+<% end -%>
+<% if log_path -%>
+StandardOutput=append:<%= log_path %>
+StandardError=append:<%= log_path %>
+<% end -%>
+<% if run_after -%>
+After=<%= after %>
+<% end -%>
+<% if start_limit_burst -%>
+StartLimitBurst=<%= start_limit_burst %>
+<% end -%>
+<%- if start_limit_interval_seconds -%>
+StartLimitIntervalSec=<%= start_limit_interval_seconds %>
+<%- end -%>
+<% enviroment_variables.to_h.each do |key, value| -%>
+Environment=<%= key %>=<%= value %>
+<% end -%>
+
+[Install]
+WantedBy=default.target
